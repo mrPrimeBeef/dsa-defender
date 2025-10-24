@@ -34,51 +34,33 @@ function resetGame() {
 // **************************************
 
 // the list of enemies is an array of size 5 - but it could be larger ...
-const enemies = new StaticArray(15);
-let enemyCount = 0;
+const enemies = new StaticArray(5); 
 
 function createInitialEnemies() {
-  // create five enemies
+ // create five enemies
   for (let i = 0; i < 5; i++) {
-    spawnNewEnemy();
+    enemies[i] = spawnNewEnemy();
   }
 }
 
 // creates a new enemy object, and adds it to the list of enemies
 function spawnNewEnemy() {
   const enemy = createEnemy();
-
   // TODO: need to add new enemy to list of enemies, here!
-  if (enemyCount < enemies.length) {
-    enemies[enemyCount] = enemy;
-    enemyCount++;
-  }
-  // Check TODO
+  
   return enemy;
 }
 
 // removes an enemy object from the list of enemies
 function removeEnemy(enemy) {
   // TODO: need to find enemy object in list of enemies, and remove it
-  for (let i = 0; i < enemies.length; i++) {
-    if (enemy === enemies[i]) {
-      enemies.set(i, null);
-      break;
-    }
-  }
+  
 }
 
 // returns the number of enemy objects in the list of enemies
 function numberOfEnemies() {
   // TODO: need to return the number of actual enemies, not the size of the array
-  let countOfEnemies = 0;
-
-  for (let i = 0; i < enemies.length; i++) {
-    if (enemies[i]) {
-      countOfEnemies++;
-    }
-  }
-  return countOfEnemies;
+  return enemies.length;
 }
 
 // ************************************************
@@ -185,14 +167,13 @@ function loop() {
   // ****
   for (const enemy of enemies) {
     // TODO: Only look at actual enemy objects from the list ...
-    if (enemy) {
-      // ignore enemies who are dying or crashing - so they don't move any further
-      if (!enemy.isFrozen) {
-        enemy.y += enemy.ySpeed * deltaTime;
-        // handle enemy hitting bottom
-        if (enemy.y >= gamesizes.height - gamesizes.enemy) {
-          enemyHitBottom(enemy);
-        }
+
+    // ignore enemies who are dying or crashing - so they don't move any further
+    if (!enemy.isFrozen) {
+      enemy.y += enemy.ySpeed * deltaTime;
+      // handle enemy hitting bottom
+      if (enemy.y >= gamesizes.height - gamesizes.enemy) {
+        enemyHitBottom(enemy);
       }
     }
   }
@@ -214,9 +195,7 @@ function loop() {
   // ****
   for (const enemy of enemies) {
     // TODO: Only do this for actual enemy objects from the list ...
-    if (enemy) {
-      displayEnemy(enemy);
-    }
+    displayEnemy(enemy);
   }
 
   // update health display
@@ -230,7 +209,7 @@ function loop() {
 
 function enemyHitBottom(enemy) {
   console.log("Enemy attacked base!");
-
+  
   // lose health
   health -= 5;
   // display crash on enemy
