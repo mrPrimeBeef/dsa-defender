@@ -12,6 +12,7 @@ const gamesizes = {
 let gameRunning = true;
 let health = 100;
 let score = 0;
+let timeUsed = 0;
 
 function start() {
   console.log("Game is running");
@@ -52,9 +53,9 @@ function spawnNewEnemy() {
   if (enemyCount < enemies.length) {
     enemies[enemyCount] = enemy;
     enemyCount++;
+    return enemy;
   }
   // Check TODO
-  return enemy;
 }
 
 // removes an enemy object from the list of enemies
@@ -133,6 +134,7 @@ function crashEnemy(enemy) {
 }
 
 function killEnemy(enemy) {
+  score += 1;
   enemy.isFrozen = true;
   enemy.visual.classList.add("explode");
   enemy.visual.addEventListener("animationend", completeKill);
@@ -179,6 +181,10 @@ function loop() {
   const now = Date.now();
   const deltaTime = (now - (last || now)) / 1000;
   last = now;
+
+  timeUsed += deltaTime;
+
+  updateHUD();
 
   // ****
   // Loop through all enemies - and move them until the reach the bottom
@@ -239,4 +245,9 @@ function enemyHitBottom(enemy) {
   shakeScreen();
   // spawn another enemy
   spawnNewEnemy();
+}
+
+function updateHUD() {
+  document.querySelector("#time").textContent = `Time: ${timeUsed.toFixed(1)}s`;
+  document.querySelector("#kills").textContent = `Kills: ${score}`;
 }
